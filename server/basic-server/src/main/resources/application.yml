@@ -1,2 +1,9 @@
 server:
-  port: 8080
+  port: 9050
+#spring:
+#  security:
+#    user:
+#      name: ugo
+#      password: asdasd1
+#      roles: USER
+
