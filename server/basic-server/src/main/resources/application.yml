@@ -1,9 +1,9 @@
 server:
   port: 9050
-#spring:
-#  security:
-#    user:
-#      name: ugo
-#      password: asdasd1
-#      roles: USER
 
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
