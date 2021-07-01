@@ -1,8 +1,6 @@
 package com.sp.fc.web.config;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.descriptor.web.ResourceBase;
-import org.springframework.boot.autoconfigure.security.StaticResourceLocation;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
