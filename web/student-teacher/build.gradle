@@ -1,6 +1,3 @@
-
 apply from: "../web-common.gradle"
-
 dependencies {
-    compileOnly project(":web-student-teacher")
 }

@@ -24,7 +24,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //선생님의 인증을 제공할 authenticationProvider
     private final TeacherManager teacherManager;
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //학생 선생님 authenticationProvider를 AuthenticationManager에 등록

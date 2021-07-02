@@ -1,4 +1,4 @@
-package com.sp.fc.web.teacher;
+package com.sp.fc.web.student;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,19 +14,20 @@ import java.util.HashSet;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TeacherAuthenticationToken implements Authentication {
+public class StudentAuthenticationToken implements Authentication {
 
-    private Teacher principal;
+
+    private Student principal;
     private String credentials;
     private String details;
     private boolean authenticated;
-
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return principal == null ? new HashSet<>() : principal.getRole();
     }
+
 
     @Override
     public String getName() {
