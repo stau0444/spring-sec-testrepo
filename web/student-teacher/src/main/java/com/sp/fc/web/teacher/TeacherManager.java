@@ -2,6 +2,7 @@ package com.sp.fc.web.teacher;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,27 +20,40 @@ public class TeacherManager implements AuthenticationProvider , InitializingBean
     //
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        //formLogin을 할 것이기 떄문에 authentication은 UsernamePasswordAuthenticationToken이 들어온다.
-        TeacherAuthenticationToken token = (TeacherAuthenticationToken) authentication;
-        //토큰에서 넘어온 유저id을 db에서 찾아서 존재하면 토큰을 생성해서 넘겨준다.
+
+        //authentication이 UsernamePasswordAuthenticationToken일 경우
+        if(authentication instanceof UsernamePasswordAuthenticationToken){
+            UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
+            if(teacherDB.containsKey(token.getName())){
+                return getAuthenticationToken(token.getName());
+            }
+         }
+
+        //authentication이 TeacherAuthenticationToken 일경우
+        TeacherAuthenticationToken token = new TeacherAuthenticationToken();
         if (teacherDB.containsKey(token.getCredentials())){
-            Teacher teacher = teacherDB.get(token.getCredentials());
-            return TeacherAuthenticationToken.builder()
-                    //db에서 찾은 도메인(인증을 통과한 대상)
-                    .principal(teacher)
-                    //인증 요청에 대한 정보들 (현재는 임의로 username을 넣음)
-                    .details(teacher.getUsername())
-                    //if문을 들어왔으니 db에 존재하기 떄문에 인증이 성공함
-                    .authenticated(true)
-                    .build();
+            return getAuthenticationToken(token.getCredentials());
         }
         return null;
+    }
+
+    private TeacherAuthenticationToken getAuthenticationToken(String id) {
+        Teacher teacher = teacherDB.get(id);
+        return TeacherAuthenticationToken.builder()
+                //db에서 찾은 도메인(인증을 통과한 대상)
+                .principal(teacher)
+                //인증 요청에 대한 정보들 (현재는 임의로 username을 넣음)
+                .details(teacher.getUsername())
+                //if문을 들어왔으니 db에 존재하기 떄문에 인증이 성공함
+                .authenticated(true)
+                .build();
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
         //UsernamePasswordAuthenticationToken을 제공하는 토큰임을 정의 하는 메서드
-       return authentication == TeacherAuthenticationToken.class;
+       return authentication == TeacherAuthenticationToken.class ||
+               authentication == UsernamePasswordAuthenticationToken.class;
     }
 
 
@@ -47,9 +61,7 @@ public class TeacherManager implements AuthenticationProvider , InitializingBean
     @Override
     public void afterPropertiesSet() throws Exception {
         Set.of(
-                new Teacher("gosam","고선생",Set.of(new SimpleGrantedAuthority("ROLE_TEACHER"))),
-                new Teacher("kangsam","강선생",Set.of(new SimpleGrantedAuthority("ROLE_TEACHER"))),
-                new Teacher("kimsam","김선생",Set.of(new SimpleGrantedAuthority("ROLE_TEACHER")))
+                new Teacher("gang","고선생",Set.of(new SimpleGrantedAuthority("ROLE_TEACHER")))
         ).forEach(t -> teacherDB.put(t.getId(),t));
     }
 }

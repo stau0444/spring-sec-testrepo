@@ -3,6 +3,6 @@ server:
 
 spring:
   thymeleaf:
-    prefix: classpath:/templates/
     cache: false
     check-template-location: true
+    prefix: classpath:/template/

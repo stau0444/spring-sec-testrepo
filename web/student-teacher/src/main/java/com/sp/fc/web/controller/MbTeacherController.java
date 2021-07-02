@@ -1,8 +1,8 @@
 package com.sp.fc.web.controller;
 
 import com.sp.fc.web.student.Student;
-import com.sp.fc.web.student.StudentManager;
 import com.sp.fc.web.teacher.Teacher;
+import com.sp.fc.web.student.StudentManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,11 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MbTeacherController{
 
-    private final StudentManager sm;
+    private final StudentManager studentManager;
 
     @PreAuthorize("hasAuthority('ROLE_TEACHER')")
     @GetMapping("/students")
     public List<Student> studentList(@AuthenticationPrincipal Teacher teacher){
-        return sm.myStudents(teacher.getId());
+        return studentManager.myStudents(teacher.getId());
     }
 }

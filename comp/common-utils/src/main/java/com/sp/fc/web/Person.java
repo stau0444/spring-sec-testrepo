@@ -1,4 +1,4 @@
-package com.sp.fc;
+package com.sp.fc.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

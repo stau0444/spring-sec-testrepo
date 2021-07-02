@@ -6,7 +6,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -18,27 +17,39 @@ import java.util.stream.Collectors;
 @Component
 public class StudentManager implements AuthenticationProvider , InitializingBean {
 
-    UsernamePasswordAuthenticationFilter filter;
 
     private HashMap<String,Student> studentDB = new HashMap<>();
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken)  authentication;
+        if(authentication instanceof UsernamePasswordAuthenticationToken){
+            UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken)  authentication;
+            if(studentDB.containsKey(token.getName())){
+                return getAuthenticationToken(token.getName());
+            }
+            return null;
+        }
+
+        StudentAuthenticationToken token = (StudentAuthenticationToken) authentication;
         if(studentDB.containsKey(token.getCredentials()) ){
-            Student student = studentDB.get(token.getCredentials());
-            return StudentAuthenticationToken.builder()
-                    .principal(student)
-                    .details(student.getUsername())
-                    .authenticated(true)
-                    .build();
+            return getAuthenticationToken(token.getCredentials());
         }
         return null;
     }
 
+    private StudentAuthenticationToken getAuthenticationToken(String id) {
+        Student student = studentDB.get(id);
+        return StudentAuthenticationToken.builder()
+                .principal(student)
+                .details(student.getUsername())
+                .authenticated(true)
+                .build();
+    }
+
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication == StudentAuthenticationToken.class;
+        return authentication == StudentAuthenticationToken.class ||
+                authentication == UsernamePasswordAuthenticationToken.class;
     }
 
     public List<Student> myStudents(String teacherId){
@@ -49,9 +60,9 @@ public class StudentManager implements AuthenticationProvider , InitializingBean
     @Override
     public void afterPropertiesSet() throws Exception {
         Set.of(
-                new Student("ugo","우고",Set.of(new SimpleGrantedAuthority("ROLE_STUDENT")),"gosam"),
-                new Student("hwang","황방",Set.of(new SimpleGrantedAuthority("ROLE_STUDENT")),"gosam"),
-                new Student("kong","공길",Set.of(new SimpleGrantedAuthority("ROLE_STUDENT")),"gosam")
+                new Student("ugo","우고",Set.of(new SimpleGrantedAuthority("ROLE_STUDENT")),"gang"),
+                new Student("hwang","황방",Set.of(new SimpleGrantedAuthority("ROLE_STUDENT")),"gang"),
+                new Student("kong","공길",Set.of(new SimpleGrantedAuthority("ROLE_STUDENT")),"gang")
         ).forEach(s -> studentDB.put(s.getId(),s));
     }
 }

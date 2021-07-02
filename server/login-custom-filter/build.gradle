@@ -2,5 +2,5 @@
 apply from: "../web-common.gradle"
 
 dependencies {
-    compileOnly project(":web-student-teacher")
+    implementation project(":web-student-teacher")
 }
