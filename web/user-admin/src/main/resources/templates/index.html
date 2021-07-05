@@ -14,6 +14,10 @@
         <h1 class="title display-5"> 메인 페이지 </h1>
     </div>
 
+    <div>
+        <p class="alert alert-info" th:text="${sessionId}"></p>
+    </div>
+
     <div class="links">
 
         <div class="link" sec:authorize="!isAuthenticated()">
