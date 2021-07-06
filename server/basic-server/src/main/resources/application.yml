@@ -1,2 +1,14 @@
 server:
-  port: 8080
+  port: 9050
+
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+    thymeleaf:
+      cache: false
+      check-template-location: true
+      prefix:
+        clas    spath:/template/
