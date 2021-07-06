@@ -15,7 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.*;
+import org.springframework.security.web.session.ConcurrentSessionFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpSessionEvent;
@@ -27,6 +29,9 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+    SessionManagementFilter smFilter;
+    ConcurrentSessionFilter conFilter;
     RememberMeAuthenticationFilter filter;
     TokenBasedRememberMeServices services;
     private final UserService userService;
@@ -59,6 +64,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .logout(logout-> logout.logoutSuccessUrl("/"))
         .exceptionHandling(e -> e.accessDeniedPage("/access-denied"))
         .rememberMe(r->r.rememberMeServices(rememberMeServices()))
+        .sessionManagement(
+                s->s.maximumSessions(1)
+                    .maxSessionsPreventsLogin(false)
+                    .expiredUrl("/session-expired")
+        )
         ;
 
     }
