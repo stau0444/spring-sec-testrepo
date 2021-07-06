@@ -14,13 +14,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
-import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.*;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpSessionEvent;
+import javax.sql.DataSource;
 import java.time.LocalDateTime;
 
 @EnableWebSecurity(debug = true)
@@ -29,11 +28,9 @@ import java.time.LocalDateTime;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     RememberMeAuthenticationFilter filter;
-    TokenBasedRememberMeServices tokenService;
-    PersistentTokenBasedRememberMeServices persistenceService;
-
-
+    TokenBasedRememberMeServices services;
     private final UserService userService;
+    private final DataSource datasource;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -61,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         )
         .logout(logout-> logout.logoutSuccessUrl("/"))
         .exceptionHandling(e -> e.accessDeniedPage("/access-denied"))
-        .rememberMe()
+        .rememberMe(r->r.rememberMeServices(rememberMeServices()))
         ;
 
     }
@@ -80,7 +77,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return NoOpPasswordEncoder.getInstance();
     }
 
+    @Bean
+    PersistentTokenBasedRememberMeServices rememberMeServices(){
+        return new PersistentTokenBasedRememberMeServices("hello",
+                userService,tokenRepository());
+    }
 
+
+    @Bean
+    PersistentTokenRepository tokenRepository(){
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(datasource);
+        try {
+            tokenRepository.removeUserTokens("1");
+        }catch (Exception e){
+            tokenRepository.setCreateTableOnStartup(true);
+        }
+        return tokenRepository;
+    }
     @Bean
     public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher(){
         return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher(){
