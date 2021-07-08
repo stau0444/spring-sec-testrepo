@@ -3,7 +3,6 @@ package com.sp.fc.web.controller;
 import com.sp.fc.user.domain.SpAuthority;
 import com.sp.fc.user.domain.SpUser;
 import com.sp.fc.user.repository.AuthRepository;
-import com.sp.fc.user.repository.UserRepository;
 import com.sp.fc.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 @RequiredArgsConstructor

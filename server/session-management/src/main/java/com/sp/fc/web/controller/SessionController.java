@@ -2,19 +2,14 @@ package com.sp.fc.web.controller;
 
 import com.sp.fc.user.domain.SpUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.thymeleaf.spring5.context.SpringContextUtils;
 
-import javax.servlet.http.HttpSession;
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
