@@ -6,6 +6,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class DbInit implements InitializingBean {
 
@@ -20,7 +22,7 @@ public class DbInit implements InitializingBean {
                     .password("1111")
                     .enabled(true)
                     .build());
-            userService.addAuthority(user.getId(), "ROLE_USER");
+            userService.addAuthority(user.getId(),List.of("ROLE_USER","ROLE_ADMIN"));
         }
         if(!userService.findUser("user2").isPresent()){
             SpUser user = userService.save(SpUser.builder()
@@ -36,7 +38,7 @@ public class DbInit implements InitializingBean {
                     .password("1111")
                     .enabled(true)
                     .build());
-            userService.addAuthority(user.getId(), "ROLE_ADMIN");
+            userService.addAuthority(user.getId(),"ROLE_ADMIN");
         }
 
 

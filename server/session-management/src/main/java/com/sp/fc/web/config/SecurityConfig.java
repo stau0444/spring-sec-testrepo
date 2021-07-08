@@ -17,6 +17,8 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -32,7 +34,8 @@ import java.time.LocalDateTime;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
+    FilterSecurityInterceptor interceptor;
+    ExceptionTranslationFilter filter;
 
     private final UserService spUserService;
     private final DataSource dataSource;
@@ -110,6 +113,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests(request->
                     request.antMatchers("/").permitAll()
+                            .antMatchers("/admin/**").hasAnyRole("ROLE_ADMIN")
                             .anyRequest().authenticated()
                 )
                 .formLogin(login->
@@ -121,7 +125,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout(logout->
                         logout.logoutSuccessUrl("/"))
                 .exceptionHandling(error->
-                        error.accessDeniedPage("/access-denied")
+                        error.accessDeniedHandler(new CustomDeniedHandler())
                 )
                 .rememberMe(r->r
                         .rememberMeServices(rememberMeServices())

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +55,21 @@ public class UserService implements UserDetailsService {
         });
     }
 
+    public void addAuthority(Long userId, List<String> authorities){
+        userRepository.findById(userId).ifPresent(user -> {
+
+            HashSet<SpAuthority> authList = new HashSet<>();
+
+                for (String authority : authorities) {
+                    SpAuthority newRole = new SpAuthority(user.getId(),authority);
+                    authList.add(newRole);
+                }
+            user.setAuthorities(authList);
+            save(user);
+
+        });
+    }
+
     public void removeAuthority(Long userid , String authority){
         userRepository.findById(userid).ifPresent(
                 user -> {
@@ -71,4 +88,5 @@ public class UserService implements UserDetailsService {
                 }
         );
     }
+
 }
