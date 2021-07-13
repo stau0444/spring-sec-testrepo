@@ -1,5 +1,7 @@
 package com.sp.fc.web.config;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     FilterSecurityInterceptor interceptor;
@@ -18,11 +21,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser(
                         User.withDefaultPasswordEncoder()
-                        .username("user1")
+                                .username("student1")
+                                .password("1111")
+                                .roles("USER","STUDENT")
+                )
+                .withUser(
+                        User.withDefaultPasswordEncoder()
+                        .username("student2")
                         .password("1111")
-                        .roles("USER")
+                        .roles("USER","STUDENT")
+                )
+                .withUser(
+                        User.withDefaultPasswordEncoder()
+                                .username("tutor1")
+                                .password("1111")
+                                .roles("USER","TUTOR")
                 );
     }
+
+    private final NameCheck nameCheck;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -30,8 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .httpBasic().and()
                 .authorizeRequests(r ->
-                                r.antMatchers("/greeting").hasAnyRole("USER")
-                                    .anyRequest().authenticated()
+                                    r.mvcMatchers("/greeting/{name}")
+                                            .access("@nameCheck.check(#name)")
+                                            .anyRequest().authenticated()
                 );
     }
 }
