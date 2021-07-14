@@ -30,22 +30,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
-    private final CustomPermissionEvaluator evaluator;
+   // private final CustomPermissionEvaluator evaluator;
 
-    @Override
-    protected MethodSecurityExpressionHandler createExpressionHandler() {
-        DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler(){
-            @Override
-            protected MethodSecurityExpressionOperations createSecurityExpressionRoot(Authentication authentication, MethodInvocation invocation) {
-                //Root는 매번 생성되기 때문에 evaluator 도 매번 등록해 줘야한다 .
-                CustomMethodSecurityExpressionRoot root = new CustomMethodSecurityExpressionRoot(authentication, invocation);
-                root.setPermissionEvaluator(getPermissionEvaluator());
-                return root;
-            }
-        };
-        handler.setPermissionEvaluator(evaluator);
-        return handler;
-    }
+//    @Override
+//    protected MethodSecurityExpressionHandler createExpressionHandler() {
+//        DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler(){
+//            @Override
+//            protected MethodSecurityExpressionOperations createSecurityExpressionRoot(Authentication authentication, MethodInvocation invocation) {
+//                //Root는 매번 생성되기 때문에 evaluator 도 매번 등록해 줘야한다 .
+//                CustomMethodSecurityExpressionRoot root = new CustomMethodSecurityExpressionRoot(authentication, invocation);
+//                root.setPermissionEvaluator(getPermissionEvaluator());
+//                return root;
+//            }
+//        };
+//        handler.setPermissionEvaluator(evaluator);
+//        return handler;
+//    }
 
     @Override
     protected AccessDecisionManager accessDecisionManager() {

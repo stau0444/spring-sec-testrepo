@@ -39,7 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 );
     }
 
-    private final NameCheck nameCheck;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

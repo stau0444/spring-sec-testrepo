@@ -13,6 +13,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
+import org.springframework.security.access.expression.SecurityExpressionOperations;
+import org.springframework.security.access.expression.SecurityExpressionRoot;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
+import org.springframework.security.access.prepost.PreInvocationAuthorizationAdviceVoter;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.expression.WebSecurityExpressionRoot;
 
 import java.util.List;
 
@@ -48,6 +55,18 @@ public class PaperTest  extends WebIntegrationTest{
     @DisplayName("student1 이 student2의 시험지는 볼 수 없어야 한다.")
     @Test
     void test2(){
+        SecurityExpressionRoot root;
+        SecurityExpressionOperations operations;
+        MethodSecurityExpressionOperations operations1;
+        PreInvocationAuthorizationAdviceVoter voter;
+        SecurityExpressionHandler handler;
+        WebSecurityExpressionRoot root1;
+
+
+
+
+        DefaultWebSecurityExpressionHandler handler1;
+
         TestRestTemplate template = new TestRestTemplate("student1","1111");
 
         //현재 접근하는 사람은 student1인데 student2의 시험지를 가져오려 한다.

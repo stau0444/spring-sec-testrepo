@@ -1,4 +1,4 @@
-package com.sp.fc.web.config;
+package com.sp.fc.web.controller;
 
 import com.sp.fc.web.domain.Paper;
 import com.sp.fc.web.service.PaperService;
