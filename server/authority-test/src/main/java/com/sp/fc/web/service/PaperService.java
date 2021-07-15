@@ -31,9 +31,23 @@ public class PaperService implements InitializingBean {
                 .title("수학시험")
                 .tutorId("tutor1")
                 .studentIds(List.of("student2"))
-                .state(Paper.State.PREPARE)
+                .state(Paper.State.READY)
                 .build();
-        papers.putAll(Map.of(1L,paper1,2L,paper2));
+        Paper paper3 = Paper.builder()
+                .paperId(3L)
+                .title("영어시험")
+                .tutorId("tutor1")
+                .studentIds(List.of("student3"))
+                .state(Paper.State.READY)
+                .build();
+        papers.putAll(Map.of(
+                            paper1.getPaperId(),paper1,
+                            paper2.getPaperId(),paper2,
+                            paper3.getPaperId(),paper3
+        ));
+
+
+
     }
 
     public void setPaper(Paper paper){
@@ -41,7 +55,8 @@ public class PaperService implements InitializingBean {
     }
 
     public List<Paper> getPapers(String username){
-        return papers.values().stream()
+
+                return papers.values().stream()
                 .filter(paper -> paper.getStudentIds().contains(username))
                 .collect(Collectors.toList());
     }
@@ -50,4 +65,7 @@ public class PaperService implements InitializingBean {
         return papers.get(paperId);
     }
 
+    public List<Paper> getPapersByPrimary() {
+        return papers.values().stream().collect(Collectors.toList());
+    }
 }

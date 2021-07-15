@@ -16,6 +16,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     FilterSecurityInterceptor interceptor;
 
 
+
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
@@ -36,7 +38,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .username("tutor1")
                                 .password("1111")
                                 .roles("USER","TUTOR")
-                );
+                )
+                .withUser(
+                User.withDefaultPasswordEncoder()
+                        .username("primary")
+                        .password("1111")
+                        .roles("USER","PRIMARY")
+        );
     }
 
 

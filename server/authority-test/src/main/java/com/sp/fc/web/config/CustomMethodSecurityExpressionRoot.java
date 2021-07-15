@@ -1,5 +1,6 @@
 package com.sp.fc.web.config;
 
+import com.sp.fc.web.domain.Paper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,7 +33,9 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
         return getAuthentication().getAuthorities().stream()
                 .anyMatch(a-> a.getAuthority().equals("ROLE_STUDENT"));
     }
-
+    public boolean notPrepareState(Paper paper){
+        return paper.getState() != Paper.State.PREPARE;
+    }
     @Override
     public Object getThis() {
         return this;

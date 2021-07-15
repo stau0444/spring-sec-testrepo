@@ -55,15 +55,6 @@ public class PaperTest  extends WebIntegrationTest{
     @DisplayName("student1 이 student2의 시험지는 볼 수 없어야 한다.")
     @Test
     void test2(){
-        SecurityExpressionRoot root;
-        SecurityExpressionOperations operations;
-        MethodSecurityExpressionOperations operations1;
-        PreInvocationAuthorizationAdviceVoter voter;
-        SecurityExpressionHandler handler;
-        WebSecurityExpressionRoot root1;
-
-
-
 
         DefaultWebSecurityExpressionHandler handler1;
 
@@ -88,5 +79,35 @@ public class PaperTest  extends WebIntegrationTest{
         System.out.println("resp.getBody() = " + resp.getBody());
 
         assertEquals(HttpStatus.FORBIDDEN, resp.getStatusCode());
+    }
+    @DisplayName("PostFilter를 통해서 State가 prepare인 오브젝트는 가져 올 수 없다")
+    @Test
+    void test_4(){
+        TestRestTemplate template = new TestRestTemplate("student2","1111");
+
+
+        ResponseEntity<List<Paper>> resp = template.exchange(uri("/paper/my-papers"), HttpMethod.GET, HttpEntity.EMPTY, new ParameterizedTypeReference<List<Paper>>() {});
+
+        System.out.println("resp.getBody() = " + resp.getBody());
+
+        assertEquals(HttpStatus.OK, resp.getStatusCode());
+        assertEquals(0 , resp.getBody().size());
+    }
+
+    @DisplayName("교장 선생님은 모든 시험지를 확인할 수 있다")
+    @Test
+    void test_5(){
+        TestRestTemplate template = new TestRestTemplate("primary","1111");
+
+
+        ResponseEntity<List<Paper>> resp = template.exchange(uri("/paper/papers-primary"), HttpMethod.GET, HttpEntity.EMPTY, new ParameterizedTypeReference<List<Paper>>() {});
+
+        assertEquals(200,resp.getStatusCodeValue());
+        assertEquals(3,resp.getBody().size());
+
+        for (Paper paper : resp.getBody()) {
+            System.out.println("paper = " + paper);
+        }
+
     }
 }
