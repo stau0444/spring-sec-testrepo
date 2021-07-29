@@ -8,7 +8,9 @@ import java.net.URI;
 
 import static java.lang.String.format;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 public class WebIntegrationTest {
 
     @LocalServerPort
