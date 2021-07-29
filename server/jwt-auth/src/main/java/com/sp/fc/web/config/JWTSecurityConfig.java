@@ -42,7 +42,7 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
 
-        JWTLoginFilter loginFilter = new JWTLoginFilter(authenticationManager());
+        JWTLoginFilter loginFilter = new JWTLoginFilter(authenticationManager(),userService);
         JWTCheckFilter checkFilter = new JWTCheckFilter(authenticationManager(),userService);
 
         //Test에서 요청이 날라올때 필터체인으로 들어와서

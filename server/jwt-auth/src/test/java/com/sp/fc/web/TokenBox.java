@@ -1,4 +1,4 @@
-package com.sp.fc.web.config;
+package com.sp.fc.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserLoginForm {
-    private String username;
-    private String password;
+public class TokenBox {
+    private String authToken;
     private String refreshToken;
 }

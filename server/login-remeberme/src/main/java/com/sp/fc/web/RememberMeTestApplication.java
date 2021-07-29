@@ -8,9 +8,6 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 
 @SpringBootApplication(scanBasePackages = {"com.sp.fc.config","com.sp.fc.web"})
 public class RememberMeTestApplication {
-    HttpSessionSecurityContextRepository repository;
-    UsernamePasswordAuthenticationFilter unfilter;
-    SecurityContextPersistenceFilter filter;
     public static void main(String[] args) {
         SpringApplication.run(RememberMeTestApplication.class,args);
     }

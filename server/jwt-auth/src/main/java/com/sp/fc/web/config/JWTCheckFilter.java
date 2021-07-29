@@ -1,6 +1,7 @@
 package com.sp.fc.web.config;
 
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.sp.fc.user.domain.SpUser;
 import com.sp.fc.user.service.UserService;
 import org.springframework.http.HttpHeaders;
@@ -59,7 +60,6 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
             chain.doFilter(request,response);
         }else {
             //401 error 발생
-            throw new AuthenticationException("Token is not valid");
-        }
+            throw new TokenExpiredException("token expired");        }
     }
 }
