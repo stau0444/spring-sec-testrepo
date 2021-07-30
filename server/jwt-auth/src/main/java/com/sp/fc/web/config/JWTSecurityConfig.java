@@ -1,12 +1,16 @@
 package com.sp.fc.web.config;
 
 import com.sp.fc.user.domain.SpUser;
+import com.sp.fc.user.service.TokenService;
 import com.sp.fc.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.h2.H2ConsoleProperties;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +18,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 
 @EnableWebSecurity
@@ -22,15 +27,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
+    private final TokenService tokenService;
 
-    @Bean
-    public void initDB(){
-        userService.save(SpUser.builder()
-                .email("user1")
-                .password("1111")
-                .enabled(true)
-                .build());
-    }
 
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -42,7 +40,7 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
 
-        JWTLoginFilter loginFilter = new JWTLoginFilter(authenticationManager(),userService);
+        JWTLoginFilter loginFilter = new JWTLoginFilter(authenticationManager(),userService,tokenService);
         JWTCheckFilter checkFilter = new JWTCheckFilter(authenticationManager(),userService);
 
         //Test에서 요청이 날라올때 필터체인으로 들어와서

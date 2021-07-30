@@ -33,7 +33,7 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
     //토큰에 대한 검사를 하는 메서드
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String bearer = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String bearer = request.getHeader("auth_token");
         if (bearer == null || !bearer.startsWith("Bearer ")){
             //만약 비어러 토큰이 없다면 요청을 흘려보내서 다음 필터 혹은 인터셉터에서 인증을 받게한다.
             chain.doFilter(request,response);

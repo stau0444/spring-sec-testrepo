@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.sp.fc.user.domain.SpUser;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 
 import java.time.Instant;
 
@@ -12,7 +13,7 @@ import java.time.Instant;
 public class JWTUtil {
 
     private static final Algorithm ALGORITHM =Algorithm.HMAC256("ugogo");
-    private static final long AUTH_TIME = 2 ;
+    private static final long AUTH_TIME = 100 ;
     private static final long REFRESH_TIME = 60 * 60 *24 * 7 ;
 
     public static String createAuthToken(SpUser user){
@@ -45,5 +46,6 @@ public class JWTUtil {
                     .username(decode.getSubject())
                     .build();
         }
+
     }
 }
