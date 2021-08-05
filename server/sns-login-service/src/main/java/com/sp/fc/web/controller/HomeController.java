@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/greeting")
-    @ResponseBody
-    public OAuth2User greeting(@AuthenticationPrincipal OAuth2User auth2User){
-        return auth2User;
+    @GetMapping("/")
+    public Object greeting(@AuthenticationPrincipal Object user){
+        return user;
     }
 }

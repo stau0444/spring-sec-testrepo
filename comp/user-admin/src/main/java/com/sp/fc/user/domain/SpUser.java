@@ -24,6 +24,8 @@ public class SpUser implements UserDetails {
     @JoinColumn(name = "user_id",foreignKey = @ForeignKey(name = "user_id"))
     private Set<SpAuthority> authorities;
 
+    private String name;
+
     private String email;
 
     private String password;
